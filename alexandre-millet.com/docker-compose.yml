@@ -1,0 +1,37 @@
+version: '3.5'
+
+services:
+  php:
+    build:
+      context: ./docker/php
+    container_name: php
+    volumes:
+      - .:/var/www/html:delegated
+      - ../../.composer:/var/www/.composer
+    working_dir: /var/www/html
+
+  nginx:
+    image: nginx:1.11.10
+    container_name: nginx
+    depends_on:
+      - php
+    ports:
+      - 443:443
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      # ...
+
+  mariadb:
+    # ...
+    volumes:
+      - dbvolume:/var/lib/mysql
+
+  node:
+    # ...
+
+  redis:
+    # ...
+
+volumes:
+  dbvolume:
+  redisvolume:
